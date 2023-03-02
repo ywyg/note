@@ -162,48 +162,28 @@ mvn clean install -Pdist -DskipTests
 
 ```
 action_time,app_name,app_version,country,location,img_living_days,img_show_cnt,img_click_cnt,img_192_196_click_cnt,img_192_196_complete_cnt
-2021-1-3,aiolos_gp,18,IN,new_coming,6,33,0,0,0
-2020-1-4,aiolos_ip,23,US,new_comming2,1,0,0,0,0
-2022-1-3,aiolos_gp,18,EG,new_coming,1,6,0,0,0
-2022-1-3,aiolos_gp,18,US,picture,2,173,0,0,0
-2022-1-3,aiolos_ip,22,JP,new_coming,10,1,0,0,0
-2022-1-4,aiolos_gp,18,GB,new_coming,13,20,0,0,0
-2022-1-3,aiolos_ip,23,GB,picture,32,8,0,0,0
-2022-1-3,aiolos_ip,23,GB,picture,29,6,0,0,0
-2022-1-4,aiolos_gp,18,DE,picture,53,4,0,0,0
-2022-1-3,aiolos_ip,23,JP,picture,4,12,0,0,0
-2022-1-4,aiolos_ip,23,US,for_you,21,0,0,0,0
-2022-1-3,aiolos_ip,23,US,picture,354,1,0,0,0
-2021-12-31,aiolos_gp,18,IN,new_coming,0,3,0,0,0
-2022-1-4,aiolos_ip,23,BR,picture,4,9,0,0,0
-2021-12-31,aiolos_ip,21,US,picture,5,1,0,0,0
-2022-1-4,aiolos_ip,23,US,new_comming2,1,0,0,0,0
-2022-1-3,aiolos_gp,18,MX,new_coming,2,147,0,0,0
-2022-1-4,aiolos_gp,18,PL,picture,2,1,0,0,0
-2022-1-3,aiolos_ip,23,JP,new_comming2,0,0,0,0,0
+2021-1-3,gs_gp,18,IN,new_coming,6,33,0,0,0
+2020-1-4,gs_ip,23,US,new_comming2,1,0,0,0,0
+2022-1-3,gs_gp,18,EG,new_coming,1,6,0,0,0
+2022-1-3,gs_gp,18,US,picture,2,173,0,0,0
+2022-1-3,gs_ip,22,JP,new_coming,10,1,0,0,0
+2022-1-4,gs_gp,18,GB,new_coming,13,20,0,0,0
+2022-1-3,gs_ip,23,GB,picture,32,8,0,0,0
+2022-1-3,gs_ip,23,GB,picture,29,6,0,0,0
+2022-1-4,gs_gp,18,DE,picture,53,4,0,0,0
+2022-1-3,gs_ip,23,JP,picture,4,12,0,0,0
+2022-1-4,gs_ip,23,US,for_you,21,0,0,0,0
+2022-1-3,gs_ip,23,US,picture,354,1,0,0,0
+2021-12-31,gs_gp,18,IN,new_coming,0,3,0,0,0
+2022-1-4,gs_ip,23,BR,picture,4,9,0,0,0
+2021-12-31,gs_ip,21,US,picture,5,1,0,0,0
+2022-1-4,gs_ip,23,US,new_comming2,1,0,0,0,0
+2022-1-3,gs_gp,18,MX,new_coming,2,147,0,0,0
+2022-1-4,gs_gp,18,PL,picture,2,1,0,0,0
+2022-1-3,gs_ip,23,JP,new_comming2,0,0,0,0,0
 ```
 
 一路下一步，提交任务，完成摄取
-
-![image-20220310163639639](https://tva1.sinaimg.cn/large/e6c9d24ely1h04vhyh9nqj21c20u079d.jpg)
-
-![image-20220310163746073](https://tva1.sinaimg.cn/large/e6c9d24ely1h04vj1zf4nj21c00u079u.jpg)
-
-![image-20220310163714131](https://tva1.sinaimg.cn/large/e6c9d24ely1h04wx0gxhyj21bm0u0jyc.jpg)
-
-![image-20220310163801281](https://tva1.sinaimg.cn/large/e6c9d24ely1h04vjbb4iqj21c00u0gr6.jpg)
-
-![image-20220310163813127](https://tva1.sinaimg.cn/large/e6c9d24ely1h04vjiwxqpj21c00u00y8.jpg)
-
-![image-20220310163823298](https://tva1.sinaimg.cn/large/e6c9d24ely1h04vjpfzanj21c00u0dmq.jpg)
-
-![image-20220310163840968](https://tva1.sinaimg.cn/large/e6c9d24ely1h04vk064frj21c00u00w0.jpg)
-
-![image-20220310163856588](https://tva1.sinaimg.cn/large/e6c9d24ely1h04vk9z1qrj21c00u0whd.jpg)
-
-![image-20220310163921312](https://tva1.sinaimg.cn/large/e6c9d24ely1h04vkph82zj21by0u0adj.jpg)
-
-![image-20220310164108553](https://tva1.sinaimg.cn/large/e6c9d24ely1h04vmkg1w8j21c00u078i.jpg)
 
 ## 【参考资料】
 
