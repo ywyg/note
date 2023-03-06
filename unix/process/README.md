@@ -1,7 +1,8 @@
 - [名词解释](./express_word)
 - [PCB](./PCB)
 - [进程的基本概念](./process_conceptual_framework)
-- [进程的创建](./create_process)
+- [进程的状态切换](./create_process)
+- [进程同步](./process_synchronization)
 
 每个进程都有一个工作目录（当前目录），所有的相对路径都是从工作目录开始解释
 
