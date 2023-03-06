@@ -1,4 +1,4 @@
-| [kernel](./kernel/README) | [IO](./IO/README.md) | [process](./process/README.md) |
+| [kernel](./kernel/README.md) | [IO](./io/README.md) | [process](./process/README.md) |
 | ------------------------- | -------------------- | ------------------------------ |
 |                           |                      |                                |
 |                           |                      |                                |
