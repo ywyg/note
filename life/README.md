@@ -1,4 +1,5 @@
 - [2023年第一次香山之旅](./2023_travel_of_xiangshan.md)
+- [手机拍摄之景区拍摄](./take_photo_by_phone.md)
 
 
 
