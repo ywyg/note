@@ -4,8 +4,12 @@
 
   > 调用函数open可以打开或者创建一个文件
   >
-  > - int open(path，flag，.... )
-  > - int openat(fd，path，flag，....)
+  > ```c
+  > #include <fcntl.h>
+  > 
+  > int open(char *path,int flag,.... );
+  > int openat(int fd,char *path,int flag,....);
+  > ```
   >
   > flag参数支持多种选项，例如`O_RDONLY`、`O_RDWR`、`O_CREAT`等，并且可以使用`或`运算构成新的参数，例如`O_RDONLY|O_CREAT` 表示文件不存在时创建并以只读形式打开
 
@@ -13,7 +17,10 @@
 
   > 创建一个文件
   >
-  > - create(path，mode)
+  > ```c
+  > #Include <fcntl.h>
+  > int create(char *path，mode_t mode);
+  > ```
   >
   > mode - 创建文件时选择的格式
   >
@@ -56,7 +63,12 @@
 
   > 关闭打开的文件
   >
-  > - close(fd)
+  > ```c
+  > #include <fcntl.h>
+  > int close(int fd);
+  > ```
+  >
+  > 
   >
   > 关闭文件会释放文件上的所有记录锁；进程结束时，内核自动关闭进程打开的所有文件
 
@@ -72,9 +84,69 @@
   >
   > 通常打开文件时，读写操作都从文件偏移量开始，并使偏移量增加本次打开所读写的字节数，可以通过
   >
-  > - lseek(fd，offset，mode)
+  > ```c
+  > #include <fcntl.h>
+  > off_t lseek(int fd, off_t offset, int whence)
+  > ```
   >
   > 设置该值
+
+- dup和dup2
+
+  > ```c
+  > int dup(int fd);
+  > int dup2(int fd,int fd2);
+  > ```
+  >
+  > 两个函数均可以复制fd，得到一个新的fd，出错时返回-1；
+  >
+  > `dup`正常返回系统可用最小fd
+  >
+  > `dup2`返回`fd2`指定文件描述符，若`fd2`正在使用，那就关闭原有，复制`fd`到`fd2`并返回
+
+- sync、fsync和fdatasync
+
+  通常情况下，传统UNIX操作系统通常存在一个高速缓冲区，磁盘IO均通过该缓冲区进行，当我们向文件写入数据，通常先保存到该缓存区域，进入磁盘写队列，这种方式称为延迟写（delayed write），如果缓存区域需要存别的数据，系统会将缓存区域所有数据全部写入磁盘后清空缓存。
+
+  > ```c
+  > #include <unistd.h>
+  > void sync(void);
+  > int fsync(int fd);
+  > int fdatasync(int fd);
+  > ```
+  >
+  > 如果有返回值并且方法执行成功，返回0，否则返回-1
+  >
+  > `sync`
+  >
+  > 将所有有改动的缓冲区放到磁盘写队列，不等待写操作成功就返回
+  >
+  > `fsync`
+  >
+  > 只对参数中fd指定的文件起作用，等待文件写入磁盘后返回结果
+  >
+  > `fdatasync`
+  >
+  > 只对参数中fd指定的文件起作用，等待文件写入磁盘后返回结果，是`faync`的弱化版本，只影响数据，对于文件属性没有影响
+
+- fcntl
+
+  > ```c
+  > #include <fcntl.h>
+  > int fcntl(int fd,int cmd,.../* int arg */)
+  > ```
+  >
+  > fcntl有这些功能，取决于cmd的取值：
+  >
+  > - 复制fd	（F_DUPFD 或 F_DUPFD_CLOEXEC）
+  > - 获取/设置fd   （F_GETFD或F_SETFD）
+  > -  获取/设置文件状态   （F_GETFL或F_SETFL）
+  > -  获取/设置异步IO所有权    （F_GETOWN或F_SETOWN）
+  > -  获取/设置记录锁    （F_GETLK、F_SETLK或F_SETLKW）
+  >
+  > 对于当前函数内CMD参数的各种可能，可查阅[此篇博客](https://www.cnblogs.com/xuyh/p/3273082.html)
+
+- 
 
 ### [文件描述符](./express_word.md)
 
@@ -130,3 +202,12 @@
 - 如果使用O_APPEND标志打开文件，那么文件偏移量直接移动到i节点的当前文件长度
 - lseek函数只改变文件表项中的文件偏移量，不做任何IO操作
 
+### 文件原子操作
+
+正常的写操作需要先调用`Lseek`将文件偏移量已到文件尾端，然后开始追写，由于这是两个操作，如果两个进程同时做这个操作，由于CPU会对进程进行调度，可能会导致线程A的文件表项的文件偏移量设置好后，B进程更新了整个文件的文件长度，导致A进程再次获取CPU时写的数据覆盖了B进程写入的数据。
+
+使用下面三种方式可以将上述操作变成原子操作：
+
+- 打开文件时使用O_APPEND
+- 使用pread函数读取
+- 使用pwrite函数写入
