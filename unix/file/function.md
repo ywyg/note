@@ -74,7 +74,27 @@ int faccessat(int fd, const *pathname, int mode, int flag);
 
 但是当`faccessat`函数的`flag`=`AT_EACCESS`时，检查的依旧是有效角色，而不是实际角色
 
-### `Unmask`
+### `unmask`
+
+设置禁止文件权限
+
+```c
+#include <sys/stat.h>
+mode_t unmask(mode_t cmask);
+```
+
+`cmask`的取值是文件权限可能值，如`S_IRGRO` （组读取权限）等，使用`｜`同时设置多组权限，一般情况可设置参数为`0`，以免出现新建文件的访问权限被`unmask`影响。
+
+### `chmod`、`fchmod`、`fchmodat`
+
+设置文件权限
+
+```c
+#include <sys/stat.h>
+int chmod(const chat *pathname, mode_t mode);
+int fchmod(int fd, mode_t mode);
+int fchmod(int fd, const chat *pathname, mode_t mode ,int flag);
+```
 
 
 

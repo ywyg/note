@@ -167,14 +167,44 @@ class文件是一种与语言平台均无关的字节码文件，可以由不同
 | u2             | 最大操作数栈深度                   | 1                      |
 | u2             | 局部变量所需存储空间               | 1                      |
 | u4             | 字节码长度(code_length)            | 1                      |
-| u1             | 字节码                             | code_length            |
+| u1             | 字节码(code)                       | code_length            |
 | u2             | 异常表长度(exception_table_length) | 1                      |
 | exception_info | 异常表                             | exception_table_length |
 | u2             | 属性数(attributes_count)           | 1                      |
 | attribute_info | attributes                         | attribute_count        |
 
 - 属性名称:固定值，标识当前属性名称
-- 属性长度，标识当前属性长度
+
+- 属性长度：标识当前属性长度
+
 - 最大操作数栈深度：虚拟机会根据这个值分配栈帧中操作栈深度
+
 - 局部变量所需存储空间：单位是(Slot)，这里使用的`slot`会在某一变量作用于执行完成后进行复用
-- 
+
+- code_length：存储java源代码编译后的字节码指令的长度，虽然是u4类型字段，但是《Java虚拟机规范》规定每个方法不允许超过65535条指令，超出则会编译器会拒绝编译。
+
+- code：java源代码编译后的字节码指令，《Java虚拟机规范》已经定义了200多条指令的含义
+
+- 异常表长度、异常表
+
+  | 类型 | 名称       | 数量 |
+  | ---- | ---------- | ---- |
+  | u2   | start_pc   | 1    |
+  | u2   | end_pc     | 1    |
+  | u2   | handler_pc | 1    |
+  | u2   | catch_type | 1    |
+
+  如果字节码在`start_pc`和`end_pc`之间出现异常，如果异常类型是`catch_type`或其子类，交由`handler_pc`处理，如果`catch_type`的值为0，代表任意异常情况都需要转到`handler_pc`处理
+
+#### `Exception`属性
+
+方法签名后throw异常，和code属性中的异常不同，异常表
+
+| 类型 | 名称                  | 数量                |
+| ---- | --------------------- | ------------------- |
+| u2   | attribute_name_index  | 1                   |
+| u4   | attribute_length      | 1                   |
+| u2   | number_of_expection   | 1                   |
+| u2   | exception_index_table | number_of_expection |
+
+`number_of_expection`表示可能抛出的异常数量，每种异常使用`exception_index_table`项表示，`exception_index_table`指向常量池中的`CONSTSNT_Class_info`型常量索引，代表了该异常的类型。
