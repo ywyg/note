@@ -42,6 +42,8 @@
 
 - `@RequestParam`
 
+  `The @RequestParam is used to read the HTML form data provided by a user and bind it to the request parameter.`
+
   与此注解对应的请求头应该是`application/x-www-form-urlencoded`
 
   > 此注解与特定的URL绑定，URL中的参数的值被转换成`@RequestParam`修饰方法的参数值，表明方法的参数应该在web请求的参数中
