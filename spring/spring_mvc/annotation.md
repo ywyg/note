@@ -1,3 +1,9 @@
+- `@Controller `
+
+  > 声明当前类是一个`Controller`,继承自`Compent`
+  >
+  > 
+  
 - `@RequestParam`
 
   与此注解对应的请求头应该是`application/json`
