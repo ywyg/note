@@ -208,3 +208,8 @@ class文件是一种与语言平台均无关的字节码文件，可以由不同
 | u2   | exception_index_table | number_of_expection |
 
 `number_of_expection`表示可能抛出的异常数量，每种异常使用`exception_index_table`项表示，`exception_index_table`指向常量池中的`CONSTSNT_Class_info`型常量索引，代表了该异常的类型。
+
+#### `LineNumberTable`属性
+
+> 描述Java源码行号和字节码行号之间对应关系的属性，代码出现异常时可以显示出错代码行号
+
