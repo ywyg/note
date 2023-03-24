@@ -5,7 +5,7 @@
 | [三方组件](./some_tool/README.md) | [network](./network/README.md) | mq                                           |
 | [life](./life/README.md)          | [other](./other/README.md)     |                                              |
 
-## 什么是开发
+
 
 所有的软件系统，目前都没有脱离冯诺依曼体系，都是由输入输出设备，存储设备，计算设备组成
 
