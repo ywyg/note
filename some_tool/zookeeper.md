@@ -328,6 +328,8 @@ zookeeper消息的同步主要是利用ZAB（Zookeeper Atomic Broadcast）协议
 
 ## 配置中心
 
+1. 新建
+
 ## 分布式锁
 
 
