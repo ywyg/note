@@ -326,11 +326,9 @@ zookeeper消息的同步主要是利用ZAB（Zookeeper Atomic Broadcast）协议
 
 通过两段提交方式来保障数据的最终一致性，由于Follower和Leader之间通过心跳来检查通信，所以可能出现在一次心跳间隔内数据没有同步到Follower，导致查询Follower获取到旧数据，不满足实时性
 
-## 配置中心
+## [配置中心 分布式锁](https://github.com/ywyg/demo/tree/master/zookeeper/config-center)
 
-1. 新建
 
-## 分布式锁
 
 
 

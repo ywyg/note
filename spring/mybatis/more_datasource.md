@@ -22,12 +22,12 @@
          strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
          datasource:
            master:
-             url: jdbc:mysql://xx.xx.xx.xx:3306/dynamic
+             url: jdbc:mysql://xx.xx.xx.xx:3306/write
              username: root
              password: 123456
              driver-class-name: com.mysql.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
-           slave_1:
-             url: jdbc:mysql://xx.xx.xx.xx:3307/dynamic
+           slave:
+             url: jdbc:mysql://xx.xx.xx.xx:3307/read
              username: root
              password: 123456
              driver-class-name: com.mysql.jdbc.Driver
@@ -41,11 +41,6 @@
    2. 作用于方法上
 
    此注解有就近原则，可以影响方法内部的 `XXXmapper` 对象，作用于方法上时会覆盖作用于类上效果
-
-4. 注意事项
-
-   - 数据源名不能使用下划线
-   - 使用事务时，由于存在数据源切换的情况，需要将事务传播级别设置为`Propagation.REQUIRES_NEW`
 
 ## 多数据源实现原理
 
