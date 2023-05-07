@@ -1,6 +1,6 @@
-| [COLLECTION](./collection/README.md) | [THREAD](./thread/README.md) | [IO](./io/README.md) |
+| [collection](./collection/README.md) | [thread](./thread/README.md) | [io](./io/README.md) |
 | ------------------------------------ | ---------------------------- | -------------------- |
-| [LOCK](./lock/README.md)             | [JVM](./jvm/README.md)       |                      |
+| [lock](./lock/README.md)             | [jvm](./jvm/README.md)       |                      |
 |                                      |                              |                      |
 |                                      |                              |                      |
 

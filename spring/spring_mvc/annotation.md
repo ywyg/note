@@ -1,3 +1,9 @@
+- `@Controller `
+
+  > 声明当前类是一个`Controller`,继承自`Compent`
+  >
+  > 
+  
 - `@RequestParam`
 
   与此注解对应的请求头应该是`application/json`
@@ -35,6 +41,8 @@
   > 
 
 - `@RequestParam`
+
+  `The @RequestParam is used to read the HTML form data provided by a user and bind it to the request parameter.`
 
   与此注解对应的请求头应该是`application/x-www-form-urlencoded`
 
