@@ -30,69 +30,116 @@
 5. 监控和管理CI/CD流水线：可以在GitLab中查看流水线的执行状态、日志和输出信息，以便进行故障排查和问题分析。还可以管理流水线的参数、环境变量、定时任务等。
 6. 配置CD环境和自动化部署：可以使用GitLab CI/CD的自动化部署功能，将代码部署到测试、预生产和生产环境中。还可以使用其他CD工具，例如Kubernetes、Docker Swarm等，来实现自动化部署和容器编排。
 
-### 创建项目
+## 配置GitLab Runner
+
+具体步骤参见[此文章](https://happygao.top/index.php/2023/05/09/gitlab_runner%e6%b3%a8%e5%86%8c/)
+
+## 创建项目
+
+1. 登陆gitlab，选择create blank project，填写一下项目信息，我这里填的项目名是`CICDDemo`，添加SSH，克隆项目到本地，添加一个基本java项目，监听8080端口，对于任何请求，返回`Hello CI CD`
 
 <img src="https://raw.githubusercontent.com/ywyg/photo/main/image-20230419193031777.png" alt="image-20230419193031777" style="zoom:50%;" />
 
-选择Create black project，填写一下项目信息，我这里填的项目名是`CICDDemo`，添加SSH，克隆项目到本地，添加一个基本java项目，监听80端口，返回`Hello CI CD`
+1. 添加.gitlab-ci.yml和Dockerfile文件，具体内容如下
 
-1. 新建项目
-2. 添加Dockerfile
+   .gitlab-ci.yml
 
-## 配置GitLab Runner
-
-由于我使用的`MAC OS`，所以这里就以此系统为例演示：其他操作可参考[官方文档](https://docs.gitlab.com/runner/install/)
-
-1. 下载`GitLab Runner`可执行文件
-
-   ```shell
-   sudo curl --output /usr/local/bin/gitlab-runner "https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-darwin-amd64"
+   ```yaml
+   image: docker:23.0-git
+   
+   stages:
+     - build
+     - deploy
+   
+   build-job:
+     stage: build
+     script:
+       - mkdir $HOME/.ssh
+       - echo "$SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa
+       - "chmod 400 $HOME/.ssh/id_rsa"
+       - "eval `ssh-agent -s`"
+       - ssh-keyscan -H "gitlab.com" >> $HOME/.ssh/known_hosts
+       - ssh-add $HOME/.ssh/id_rsa
+       - git clone git@gitlab.com:ywyg/cicddemo.git
+       - cd cicddemo
+       - docker build -t cdemo .
+       - docker tag cdemo happygao.top:5000/cdemo
+       - docker push happygao.top:5000/cdemo
+     only:
+       refs:
+         - tags
+   
+   deploy-job:
+     stage: deploy
+     environment: production
+     script:
+       - mkdir $HOME/.ssh
+       - echo "$TC_KEY" > $HOME/.ssh/TC_login.pem
+       - ssh -T -i $HOME/.ssh/TC_login.pem root@101.43.238.234
+       - docker pull happygao.top:5000/cdemo
+       - docker run -d -p 8080:8080 happygao.top:5000/cdemo --name cdemo
+     only:
+       refs:
+         - tags
    ```
 
-2. 添加权限
+   Dockerfile
 
-   ```shell
-   sudo chmod +x /usr/local/bin/gitlab-runner
+   ```dockerfile
+   FROM maven:3.8.4-jdk-11-slim AS build
+   COPY . /app
+   WORKDIR /app
+   RUN mvn clean package
+   
+   FROM adoptopenjdk/openjdk11:alpine-jre
+   WORKDIR /app
+   COPY --from=build /app/target/*.jar /app/cdemo.jar
+   EXPOSE 8080
+   ENTRYPOINT ["java","-jar","/app/cdemo.jar"]
    ```
 
-3. 启动`GitLab Runner`
+### .gitLab-ci.yml
 
-   ```shell
-   gitlab-runner install
-   gitlab-runner start
-   ```
+- image: docker:23.0-git
 
-4. 重启计算机
+  image标签指定gitlab-runner所用镜像，当gitLab-ci.yml文件不指定镜像时，会使用配置GitLab Runner步骤过程选择的默认镜像，后续的所有脚本都会在这个镜像启动的容器内部运行
 
-5. 注册`GitLab Runner`到`GitLab`
+- stages:
 
-   1. 打开GitLab页面，点击project->setting->CI/CD
+  stages标签表明当前CI/CD流程存在的具体步骤，我这个项目包含build和deploy两个步骤
 
-   2. 选择Runner，expand
+- build-job:
 
-      <img src="https://raw.githubusercontent.com/ywyg/photo/main/image-20230420100340710.png" alt="image-20230420100340710" style="zoom:50%;" />
+  stage表明当前job所属stage
 
-   3.  复制「And this registration token」内容
+  script:
 
-      ```shell
-      sudo gitlab-runner register --url https://gitlab.com/ --registration-token $REGISTRATION_TOKEN 
-      ```
+  当前job需要执行的脚本，
 
-   4. 在安装GitLab Runner的机器上执行命令，使用刚才复制的「And this registration token」替换 `$REGISTRATION_TOKEN `
+```
+    - mkdir $HOME/.ssh  #创建目录，用于存放ssh私钥文件
+    - echo "$SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa #SSH_PRIVATE_KEY是一个变量，可以在gitlab项目setting-setting-variables处设置，此处表示的是私钥文件内容
+    - "chmod 400 $HOME/.ssh/id_rsa" #添加读取权限
+    - "eval `ssh-agent -s`" #启动ssh-agent代理程序
+    - ssh-keyscan -H "gitlab.com" >> $HOME/.ssh/known_hosts
+    # 获取gitlab.com的公钥信息并保存到known_hosts
+    - ssh-add $HOME/.ssh/id_rsa #将私钥添加到 SSH agent 的进程中，后续链接gitlab.com不再需要使用密码
+    - git clone git@gitlab.com:ywyg/cicddemo.git #clone项目到本地
+    - cd cicddemo #进入项目目录
+    - docker build -t cdemo . #构建镜像
+    - docker tag cdemo happygao.top:5000/cdemo #对镜像打上目标仓库tag
+    - docker push happygao.top:5000/cdemo #推送到私有仓库
+  only: #只有以下分支才会触发ci流程
+    refs:
+      - tags
+```
 
-      ```shell
-      sudo gitlab-runner register --url https://gitlab.com/ --registration-token $REGISTRATION_TOKEN 
-      ```
 
-   5. 按要求输入一些配置信息，完成后可以在GitLab Runner处看到配置的Runner信息
 
-      
 
-      
 
-      
 
-      
+
 
 
 
